@@ -2,12 +2,27 @@ import axios from "axios";
 
 // constants
 const GET_ITEMS = "GET_ITEMS";
+const DELETE_ITEM = "DELETE_ITEM";
+const ADD_ITEM = "ADD_ITEM";
 
 // ACTION CREATORS
 export function getItems() {
   return {
     type: GET_ITEMS,
     payload: axios.get("/api/items")
+  };
+}
+export function deleteItem(id) {
+  return {
+    type: DELETE_ITEM,
+    payload: axios.delete(`/api/item/${id}`)
+  };
+}
+
+export function addMyItem(name, price) {
+  return {
+    type: ADD_ITEM,
+    payload: axios.post("/api/item", { name, price })
   };
 }
 
@@ -25,6 +40,18 @@ export default function itemsReducer(state = initialState, action) {
         isLoading: true
       };
     case `${GET_ITEMS}_FULFILLED`:
+      return {
+        ...state,
+        isLoading: false,
+        items: action.payload.data
+      };
+    case `${DELETE_ITEM}_FULFILLED`:
+      return {
+        ...state,
+        isLoading: false,
+        items: action.payload.data
+      };
+    case `${ADD_ITEM}_FULFILLED`:
       return {
         ...state,
         isLoading: false,

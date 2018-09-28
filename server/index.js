@@ -4,7 +4,7 @@ const { json } = require("body-parser");
 const massive = require("massive");
 
 // controllers
-const { getItems } = require("./ctrl");
+const { getItems, removeItem, addItem } = require("./ctrl");
 
 const app = express();
 
@@ -22,6 +22,8 @@ massive(process.env.CONNECTION_STRING).then(dbInstance => {
 
 // endpoints
 app.get("/api/items", getItems);
+app.delete("/api/item/:id", removeItem);
+app.post("/api/item", addItem);
 
 const port = 3001;
 app.listen(port, () => console.log(`Ayyyy all good from ${port}`));
