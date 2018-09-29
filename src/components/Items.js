@@ -1,15 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getItems, deleteItem, addMyItem } from "../ducks/itemsReducer";
+import {
+  getItems,
+  deleteItem,
+  addMyItem,
+  updatePrice
+} from "../ducks/itemsReducer";
 
 class Items extends Component {
   constructor() {
     super();
     this.state = {
       name: "",
-      price: 0
+      price: 0,
+      updatedPrice: 0
     };
   }
+
+  handleInput = e => {
+    this.setState({ updatedPrice: e });
+  };
 
   componentDidMount() {
     this.props.getItems();
@@ -17,6 +27,10 @@ class Items extends Component {
 
   addSubmitHandler = (name, price) => {
     this.props.addMyItem(name, price);
+  };
+
+  updatePriceHandler = id => {
+    this.props.updatePrice(id, { price: this.state.updatedPrice });
   };
 
   render() {
@@ -30,8 +44,13 @@ class Items extends Component {
           <button onClick={() => this.props.deleteItem(elem.item_id)}>
             Delete
           </button>
-          <input placeholder="change price" />
-          <button>Update Price</button>
+          <input
+            onChange={e => this.handleInput(e.target.value)}
+            placeholder="change price"
+          />
+          <button onClick={() => this.updatePriceHandler(elem.item_id)}>
+            Update Price
+          </button>
         </div>
       );
     });
@@ -66,5 +85,5 @@ const mapStateToProps = state => state;
 
 export default connect(
   mapStateToProps,
-  { getItems, deleteItem, addMyItem }
+  { getItems, deleteItem, addMyItem, updatePrice }
 )(Items);

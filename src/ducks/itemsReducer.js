@@ -4,6 +4,7 @@ import axios from "axios";
 const GET_ITEMS = "GET_ITEMS";
 const DELETE_ITEM = "DELETE_ITEM";
 const ADD_ITEM = "ADD_ITEM";
+const UPDATE_PRICE = "UPDATE_PRICE";
 
 // ACTION CREATORS
 export function getItems() {
@@ -26,6 +27,13 @@ export function addMyItem(name, price) {
   };
 }
 
+export function updatePrice(id, price) {
+  return {
+    type: UPDATE_PRICE,
+    payload: axios.put(`/api/item/${id}`, price)
+  };
+}
+
 // initial state
 const initialState = {
   items: []
@@ -33,6 +41,7 @@ const initialState = {
 
 // reducer function
 export default function itemsReducer(state = initialState, action) {
+  console.log(action.payload);
   switch (action.type) {
     case `${GET_ITEMS}_PENDING`:
       return {
@@ -52,6 +61,12 @@ export default function itemsReducer(state = initialState, action) {
         items: action.payload.data
       };
     case `${ADD_ITEM}_FULFILLED`:
+      return {
+        ...state,
+        isLoading: false,
+        items: action.payload.data
+      };
+    case `${UPDATE_PRICE}_FULFILLED`:
       return {
         ...state,
         isLoading: false,
